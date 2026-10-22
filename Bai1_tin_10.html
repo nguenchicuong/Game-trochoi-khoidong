@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học Tương Tác Tin Học 10 - Bài 1: Thông Tin Và Xử Lý Thông Tin</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        cs: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0b132b; color: #f8fafc; }
+        .glass-card {
+            background: rgba(28, 37, 65, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glow-btn:hover {
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0b132b; }
+        ::-webkit-scrollbar-thumb { background: #1c2541; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3a506b; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+    <!-- Top Header -->
+    <header class="sticky top-0 z-50 glass-card border-b border-slate-700/50 px-4 py-3">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white text-xl font-bold shadow-lg">
+                    <i class="fa-solid fa-microchip"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-slate-100 leading-tight">TIN HỌC 10 - BÀI 1: THÔNG TIN VÀ XỬ LÝ THÔNG TIN</h1>
+                    <p class="text-xs text-cyan-400">Hệ Thống 5 Mô Phỏng & Trò Chơi Tương Tác Bối Cảnh Thực Tế</p>
+                </div>
+            </div>
+
+            <!-- Score & Stats Header -->
+            <div class="flex items-center gap-4 bg-slate-900/80 px-4 py-1.5 rounded-full border border-slate-700">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-trophy text-yellow-400"></i>
+                    <span class="text-xs text-slate-400">Tổng điểm:</span>
+                    <span id="global-score" class="font-extrabold text-amber-400 text-lg">0</span>
+                </div>
+                <div class="h-4 w-px bg-slate-700"></div>
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-medal text-purple-400"></i>
+                    <span id="badge-count" class="text-xs font-semibold text-purple-300">0/5 Huy hiệu</span>
+                </div>
+                <button onclick="resetAllProgress()" class="text-xs text-slate-400 hover:text-red-400 ml-2" title="Làm mới tiến trình">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto w-full px-4 py-6 flex-1">
+        
+        <!-- Navigation Tabs -->
+        <div class="flex flex-wrap gap-2 mb-6 border-b border-slate-700 pb-3">
+            <button onclick="switchGame(1)" id="tab-1" class="tab-btn active px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all bg-cyan-600 text-white shadow-md">
+                <i class="fa-solid fa-cloud-sun-rain"></i> 1. Dự Báo Thời Tiết
+            </button>
+            <button onclick="switchGame(2)" id="tab-2" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all bg-slate-800 text-slate-300 hover:bg-slate-700">
+                <i class="fa-solid fa-book-bookmark"></i> 2. Số Hóa Thư Viện
+            </button>
+            <button onclick="switchGame(3)" id="tab-3" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all bg-slate-800 text-slate-300 hover:bg-slate-700">
+                <i class="fa-solid fa-camera"></i> 3. Quản Lý Thẻ Nhớ
+            </button>
+            <button onclick="switchGame(4)" id="tab-4" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all bg-slate-800 text-slate-300 hover:bg-slate-700">
+                <i class="fa-solid fa-city"></i> 4. Thành Phố Thông Minh
+            </button>
+            <button onclick="switchGame(5)" id="tab-5" class="tab-btn px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all bg-slate-800 text-slate-300 hover:bg-slate-700 border border-emerald-500/30">
+                <i class="fa-solid fa-diagram-project text-emerald-400"></i> 5. Quy Trình Xử Lý
+            </button>
+        </div>
+
+        <!-- GAME AREA CONTAINER -->
+        <div id="game-container" class="w-full">
+
+            <!-- ========================================== -->
+            <!-- GAME 1: TRỰC BAN DỰ BÁO THỜI TIẾT           -->
+            <!-- ========================================== -->
+            <section id="game-1" class="game-view space-y-6">
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="flex justify-between items-start flex-wrap gap-4 mb-4">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-cyan-400">Trò chơi 1 • Ngữ cảnh & Tính toàn vẹn thông tin</span>
+                            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-cloud-sun-rain text-amber-400"></i> Trực Ban Trung Tâm Dự Báo Thời Tiết
+                            </h2>
+                            <p class="text-sm text-slate-300 mt-1">Phân tích dữ liệu thô trong đúng ngữ cảnh để đưa ra thông tin có ý nghĩa chính xác.</p>
+                        </div>
+                        <div class="bg-slate-900/80 px-4 py-2 rounded-xl border border-slate-700 text-right">
+                            <span class="text-xs text-slate-400">Điểm trò chơi:</span>
+                            <div id="g1-score" class="text-xl font-bold text-cyan-400">0</div>
+                        </div>
+                    </div>
+
+                    <!-- Scenario Card -->
+                    <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-700 mb-6 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                            <span class="text-xs font-bold text-amber-400 uppercase"><i class="fa-solid fa-satellite mr-1"></i> Dữ liệu cảm biến trạm quan trắc</span>
+                            <span class="text-xs bg-slate-800 px-2.5 py-1 rounded text-slate-300">Tình huống khẩn cấp</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                            <div class="p-4 bg-slate-950 rounded-lg border border-slate-800 space-y-2">
+                                <p class="text-xs text-slate-400">Dữ liệu thô nhận được từ Cảm biến #A01:</p>
+                                <div class="text-3xl font-mono font-extrabold text-amber-400">40 °C</div>
+                                <p class="text-xs text-slate-300">Trạm đo: Vùng trung tâm Hà Nội vào thời điểm 13:00 PM ngày giữa tháng 6.</p>
+                            </div>
+                            <div class="space-y-3">
+                                <label class="block text-xs text-slate-300 font-semibold">1. Hãy chuyển hóa dữ liệu "40 °C" thành THÔNG TIN chính xác theo đúng ngữ cảnh thời tiết:</label>
+                                <select id="g1-select-info" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200">
+                                    <option value="">-- Chọn thông tin rút ra --</option>
+                                    <option value="sot">Bệnh nhân đang bị sốt cao cần uống thuốc giảm sốt</option>
+                                    <option value="nang">Thời tiết nắng nóng gay gắt, người dân nên hạn chế ra đường</option>
+                                    <option value="dong">Thời tiết lạnh giá cần mặc ấm</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Task 2: Data Integrity -->
+                    <div class="bg-slate-900/60 p-5 rounded-xl border border-slate-800 space-y-4">
+                        <h3 class="font-bold text-sky-400 text-sm uppercase flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved"></i> Kiểm tra tính toàn vẹn của bản tin dự báo
+                        </h3>
+                        <p class="text-xs text-slate-300">Nhân viên tập sự vừa soạn bản tin: <i class="text-amber-300">"Chiều nay khu vực A sẽ có mưa lớn."</i> Bản tin này bị đánh giá là **thiếu tính toàn vẹn**. Hãy bổ sung yếu tố dữ liệu nào dưới đây?</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <button onclick="checkG1Integrity('time')" class="p-3 bg-slate-800 border border-slate-700 hover:border-cyan-400 rounded-xl text-left text-xs font-semibold text-slate-200 transition-all">
+                                A. Bổ sung khung thời gian cụ thể và lượng mưa dự báo (VD: từ 15h-17h, lượng mưa 50mm)
+                            </button>
+                            <button onclick="checkG1Integrity('font')" class="p-3 bg-slate-800 border border-slate-700 hover:border-cyan-400 rounded-xl text-left text-xs font-semibold text-slate-200 transition-all">
+                                B. Thay đổi phông chữ và kiểu chữ của bản tin
+                            </button>
+                            <button onclick="checkG1Integrity('music')" class="p-3 bg-slate-800 border border-slate-700 hover:border-cyan-400 rounded-xl text-left text-xs font-semibold text-slate-200 transition-all">
+                                C. Chèn thêm nhạc nền sôi động cho bản tin
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="g1-feedback" class="text-xs font-bold text-center mt-3"></div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- GAME 2: SỐ HÓA THƯ VIỆN TRƯỜNG HỌC        -->
+            <!-- ========================================== -->
+            <section id="game-2" class="game-view hidden space-y-6">
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="flex justify-between items-start flex-wrap gap-4 mb-4">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-amber-400">Trò chơi 2 • Quy đổi đơn vị & Lựa chọn thiết bị</span>
+                            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-book-bookmark text-amber-400"></i> Chuyên Viên Số Hóa Thư Viện Trường Học
+                            </h2>
+                            <p class="text-sm text-slate-300 mt-1">Tính toán tổng dung lượng lưu trữ số và lựa chọn thiết bị lưu trữ tối ưu.</p>
+                        </div>
+                        <div class="bg-slate-900/80 px-4 py-2 rounded-xl border border-slate-700 text-right">
+                            <span class="text-xs text-slate-400">Điểm trò chơi:</span>
+                            <div id="g2-score" class="text-xl font-bold text-amber-400">0</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Problem & Calculator -->
+                        <div class="lg:col-span-2 bg-slate-900/80 p-5 rounded-xl border border-slate-700 space-y-4">
+                            <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 space-y-2 text-xs">
+                                <span class="text-amber-400 font-bold uppercase">Nhiệm vụ số hóa:</span>
+                                <p class="text-slate-200 leading-relaxed">
+                                    Thư viện trường có <span class="text-cyan-400 font-bold">2.000 cuốn sách</span>. Môi cuốn sách sau khi quét (scan) và lưu trữ số hóa có dung lượng trung bình là <span class="text-emerald-400 font-bold">50 MB</span>.
+                                </p>
+                                <p class="text-slate-400 font-mono text-[11px]">*Gợi ý quy đổi: 1 GB = 1024 MB</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="space-y-1">
+                                    <label class="block text-xs text-slate-300">1. Tổng dung lượng tính bằng MB:</label>
+                                    <input type="number" id="g2-mb-input" placeholder="Nhập số MB" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm font-mono text-cyan-400 focus:outline-none">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-xs text-slate-300">2. Quy đổi ra GB (làm tròn 1 chữ số thập phân):</label>
+                                    <input type="number" step="0.1" id="g2-gb-input" placeholder="Nhập số GB (VD: 97.7)" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm font-mono text-emerald-400 focus:outline-none">
+                                </div>
+                            </div>
+
+                            <div class="pt-2 border-t border-slate-800">
+                                <label class="block text-xs text-slate-300 mb-2 font-semibold">3. Đề xuất mua thiết bị lưu trữ tối ưu nhất (vừa chứa đủ, tiết kiệm ngân sách):</label>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                    <button onclick="selectG2Device('usb64')" id="btn-dev-usb64" class="p-3 bg-slate-800 border border-slate-700 rounded-xl text-xs text-center font-bold text-slate-300 hover:border-amber-400">
+                                        USB 64 GB
+                                    </button>
+                                    <button onclick="selectG2Device('sd128')" id="btn-dev-sd128" class="p-3 bg-slate-800 border border-slate-700 rounded-xl text-xs text-center font-bold text-slate-300 hover:border-amber-400">
+                                        Thẻ nhớ 128 GB
+                                    </button>
+                                    <button onclick="selectG2Device('hdd2tb')" id="btn-dev-hdd2tb" class="p-3 bg-slate-800 border border-slate-700 rounded-xl text-xs text-center font-bold text-slate-300 hover:border-amber-400">
+                                        Ổ cứng di động 2 TB
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button onclick="checkG2Digitization()" class="w-full py-2.5 bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-bold text-xs rounded-lg hover:brightness-110">
+                                XÁC NHẬN BÁO CÁO SỐ HÓA
+                            </button>
+                        </div>
+
+                        <!-- Info Graphic / Unit Ladder -->
+                        <div class="bg-slate-950 p-5 rounded-xl border border-slate-800 flex flex-col justify-between">
+                            <h4 class="text-xs font-bold text-cyan-400 uppercase border-b border-slate-800 pb-2">Bảng đơn vị đo dung lượng</h4>
+                            <div class="space-y-2 text-xs font-mono my-4">
+                                <div class="p-2 bg-slate-900 rounded border border-slate-800 flex justify-between"><span class="text-slate-400">1 Byte</span><span>8 bits</span></div>
+                                <div class="p-2 bg-slate-900 rounded border border-slate-800 flex justify-between"><span class="text-slate-400">1 KB</span><span>1024 B</span></div>
+                                <div class="p-2 bg-slate-900 rounded border border-slate-800 flex justify-between"><span class="text-slate-400">1 MB</span><span>1024 KB</span></div>
+                                <div class="p-2 bg-slate-900 rounded border border-slate-800 flex justify-between text-cyan-400 font-bold"><span class="text-cyan-300">1 GB</span><span>1024 MB</span></div>
+                                <div class="p-2 bg-slate-900 rounded border border-slate-800 flex justify-between"><span class="text-slate-400">1 TB</span><span>1024 GB</span></div>
+                            </div>
+                            <div id="g2-feedback" class="text-xs font-semibold text-center"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- GAME 3: QUẢN LÝ THẺ NHỚ MÁY ẢNH          -->
+            <!-- ========================================== -->
+            <section id="game-3" class="game-view hidden space-y-6">
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="flex justify-between items-start flex-wrap gap-4 mb-4">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-purple-400">Trò chơi 3 • Tính toán dung lượng thực tế</span>
+                            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-camera text-purple-400"></i> Kiếm Kiểm Viên Máy Ảnh Kỹ Thuật Số
+                            </h2>
+                            <p class="text-sm text-slate-300 mt-1">Tính kích thước trung bình tệp ảnh và dự đoán khả năng chứa của thẻ nhớ.</p>
+                        </div>
+                        <div class="bg-slate-900/80 px-4 py-2 rounded-xl border border-slate-700 text-right">
+                            <span class="text-xs text-slate-400">Điểm trò chơi:</span>
+                            <div id="g3-score" class="text-xl font-bold text-purple-400">0</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Photo List -->
+                        <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-700 space-y-3">
+                            <h3 class="text-xs font-bold text-amber-400 uppercase flex items-center gap-2">
+                                <i class="fa-solid fa-images"></i> Danh sách 4 tệp ảnh mẫu trên thẻ nhớ:
+                            </h3>
+                            <div class="space-y-2 font-mono text-xs">
+                                <div class="p-2.5 bg-slate-950 rounded border border-slate-800 flex justify-between items-center">
+                                    <span><i class="fa-regular fa-image text-cyan-400 mr-2"></i>IMG_0001.JPG</span>
+                                    <span class="text-emerald-400">10.144 KB</span>
+                                </div>
+                                <div class="p-2.5 bg-slate-950 rounded border border-slate-800 flex justify-between items-center">
+                                    <span><i class="fa-regular fa-image text-cyan-400 mr-2"></i>IMG_0002.JPG</span>
+                                    <span class="text-emerald-400">9.888 KB</span>
+                                </div>
+                                <div class="p-2.5 bg-slate-950 rounded border border-slate-800 flex justify-between items-center">
+                                    <span><i class="fa-regular fa-image text-cyan-400 mr-2"></i>IMG_0003.JPG</span>
+                                    <span class="text-emerald-400">10.016 KB</span>
+                                </div>
+                                <div class="p-2.5 bg-slate-950 rounded border border-slate-800 flex justify-between items-center">
+                                    <span><i class="fa-regular fa-image text-cyan-400 mr-2"></i>IMG_0004.JPG</span>
+                                    <span class="text-emerald-400">9.440 KB</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Calculations -->
+                        <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-700 space-y-4 flex flex-col justify-between">
+                            <div class="space-y-3">
+                                <div>
+                                    <label class="block text-xs text-slate-300 font-semibold mb-1">1. Tính trung bình dung lượng 1 bức ảnh (KB):</label>
+                                    <input type="number" id="g3-avg-input" placeholder="VD: 9872" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm font-mono text-purple-300 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-300 font-semibold mb-1">2. Thẻ nhớ <span class="text-amber-400">16 GB</span> chứa được khoảng bao nhiêu bức ảnh như trên?</label>
+                                    <p class="text-[11px] text-slate-400 mb-1">*Gợi ý: Đổi 16 GB = 16 x 1024 x 1024 KB rồi chia cho dung lượng TB 1 ảnh</p>
+                                    <input type="number" id="g3-count-input" placeholder="Nhập số lượng ảnh (VD: 1700)" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm font-mono text-cyan-300 focus:outline-none">
+                                </div>
+                            </div>
+
+                            <button onclick="checkG3PhotoCalc()" class="w-full py-2.5 bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold text-xs rounded-lg hover:brightness-110">
+                                ĐÁNH GIÁ SỨC CHỨA THẺ NHỚ
+                            </button>
+                            <div id="g3-feedback" class="text-xs font-semibold text-center"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- GAME 4: THÀNH PHỐ THÔNG MINH             -->
+            <!-- ========================================== -->
+            <section id="game-4" class="game-view hidden space-y-6">
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="flex justify-between items-start flex-wrap gap-4 mb-4">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Trò chơi 4 • Phân loại & Ưu điểm thiết bị số</span>
+                            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-city text-emerald-400"></i> Nâng Cấp Thành Phố Thông Minh
+                            </h2>
+                            <p class="text-sm text-slate-300 mt-1">Phân biệt thiết bị số và các thiết bị truyền thống, khám phá ưu điểm vượt trội của công nghệ số.</p>
+                        </div>
+                        <div class="bg-slate-900/80 px-4 py-2 rounded-xl border border-slate-700 text-right">
+                            <span class="text-xs text-slate-400">Điểm trò chơi:</span>
+                            <div id="g4-score" class="text-xl font-bold text-emerald-400">0</div>
+                        </div>
+                    </div>
+
+                    <!-- Items Grid -->
+                    <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-700 space-y-4">
+                        <h3 class="text-xs font-bold text-amber-400 uppercase">
+                            <i class="fa-solid fa-hand-pointer mr-1"></i> Chọn đúng tất cả các THIẾT BỊ SỐ để đưa vào vận hành thành phố:
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3" id="g4-device-grid">
+                            <!-- Injected by JS -->
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-800">
+                            <h3 class="text-xs font-bold text-cyan-400 uppercase mb-2">Ưu điểm vượt trội của thiết bị số (Chọn các câu ĐÚNG):</h3>
+                            <div class="space-y-2 text-xs">
+                                <label class="flex items-center gap-2 bg-slate-950 p-2.5 rounded border border-slate-800 cursor-pointer hover:bg-slate-900">
+                                    <input type="checkbox" id="g4-opt-1" class="accent-emerald-500">
+                                    <span>Khả năng lưu trữ thông tin cực kỳ lớn trong thiết bị nhỏ gọn</span>
+                                </label>
+                                <label class="flex items-center gap-2 bg-slate-950 p-2.5 rounded border border-slate-800 cursor-pointer hover:bg-slate-900">
+                                    <input type="checkbox" id="g4-opt-2" class="accent-emerald-500">
+                                    <span>Xử lý thông tin với tốc độ cực nhanh (vài chục tỷ phép tính/giây)</span>
+                                </label>
+                                <label class="flex items-center gap-2 bg-slate-950 p-2.5 rounded border border-slate-800 cursor-pointer hover:bg-slate-900">
+                                    <input type="checkbox" id="g4-opt-3" class="accent-emerald-500">
+                                    <span>Không bao giờ bị hỏng hóc hay chịu tác động của môi trường</span>
+                                </label>
+                                <label class="flex items-center gap-2 bg-slate-950 p-2.5 rounded border border-slate-800 cursor-pointer hover:bg-slate-900">
+                                    <input type="checkbox" id="g4-opt-4" class="accent-emerald-500">
+                                    <span>Truyền tin tức thời qua mạng Internet/cáp quang với khoảng cách xa</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button onclick="checkG4SmartCity()" class="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 font-bold text-xs rounded-lg hover:brightness-110">
+                            KÍCH HOẠT THÀNH PHỐ THÔNG MINH
+                        </button>
+                        <div id="g4-feedback" class="text-xs font-semibold text-center"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- GAME 5: SƠ ĐỒ MÔ HÌNH XỬ LÝ THÔNG TIN      -->
+            <!-- ========================================== -->
+            <section id="game-5" class="game-view hidden space-y-6">
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="flex justify-between items-start flex-wrap gap-4 mb-4">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-sky-400">Trò chơi 5 • Ghép nối mô hình 3 bước</span>
+                            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-diagram-project text-sky-400"></i> Giải Mã Quy Trình Xử Lý Thông Tin
+                            </h2>
+                            <p class="text-sm text-slate-300 mt-1">Sắp xếp các hoạt động trong đời sống vào mô hình 3 bước: Nhận thông tin $\rightarrow$ Xử lý $\rightarrow$ Xuất/Lưu trữ.</p>
+                        </div>
+                        <div class="bg-slate-900/80 px-4 py-2 rounded-xl border border-slate-700 text-right">
+                            <span class="text-xs text-slate-400">Điểm trò chơi:</span>
+                            <div id="g5-score" class="text-xl font-bold text-sky-400">0</div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Diagram -->
+                    <div class="bg-slate-900/80 p-5 rounded-xl border border-slate-700 space-y-6">
+                        <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 text-xs">
+                            <span class="text-amber-400 font-bold">Tình huống thực tế:</span>
+                            <p class="text-slate-300 mt-1">
+                                Bạn Rút tiền tại máy ATM: Bạn đưa thẻ và nhập mã PIN $\rightarrow$ Máy kiểm tra số dư và thông tin tài khoản $\rightarrow$ Máy nhả tiền và in hóa đơn.
+                            </p>
+                        </div>
+
+                        <!-- 3 Step slots -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 text-center space-y-2">
+                                <span class="text-xs font-bold text-cyan-400 uppercase block">Bước 1: Tiếp nhận dữ liệu</span>
+                                <div id="g5-slot-1" onclick="clearG5Slot(1)" class="min-h-[60px] border-2 border-dashed border-cyan-500/50 rounded-lg flex items-center justify-center p-2 text-xs font-semibold text-cyan-300 cursor-pointer">
+                                    Thả thao tác vào đây
+                                </div>
+                            </div>
+                            <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 text-center space-y-2">
+                                <span class="text-xs font-bold text-amber-400 uppercase block">Bước 2: Xử lý dữ liệu</span>
+                                <div id="g5-slot-2" onclick="clearG5Slot(2)" class="min-h-[60px] border-2 border-dashed border-amber-500/50 rounded-lg flex items-center justify-center p-2 text-xs font-semibold text-amber-300 cursor-pointer">
+                                    Thả thao tác vào đây
+                                </div>
+                            </div>
+                            <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 text-center space-y-2">
+                                <span class="text-xs font-bold text-emerald-400 uppercase block">Bước 3: Xuất kết quả</span>
+                                <div id="g5-slot-3" onclick="clearG5Slot(3)" class="min-h-[60px] border-2 border-dashed border-emerald-500/50 rounded-lg flex items-center justify-center p-2 text-xs font-semibold text-emerald-300 cursor-pointer">
+                                    Thả thao tác vào đây
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pool of cards -->
+                        <div class="space-y-2">
+                            <span class="text-xs text-slate-400 block font-semibold">Chọn thẻ để xếp vào các bước trên:</span>
+                            <div class="flex flex-wrap gap-2" id="g5-card-pool">
+                                <button onclick="assignG5Card('Đưa thẻ ATM và nhập mã PIN', 1)" class="p-2.5 bg-slate-800 border border-slate-700 hover:border-cyan-400 rounded-lg text-xs font-semibold text-slate-200">
+                                    Đưa thẻ ATM & nhập mã PIN
+                                </button>
+                                <button onclick="assignG5Card('Máy kiểm tra mã PIN và số dư', 2)" class="p-2.5 bg-slate-800 border border-slate-700 hover:border-amber-400 rounded-lg text-xs font-semibold text-slate-200">
+                                    Máy kiểm tra mã PIN & số dư
+                                </button>
+                                <button onclick="assignG5Card('Máy nhả tiền lẻ và in hóa đơn', 3)" class="p-2.5 bg-slate-800 border border-slate-700 hover:border-emerald-400 rounded-lg text-xs font-semibold text-slate-200">
+                                    Máy nhả tiền lẻ & in hóa đơn
+                                </button>
+                            </div>
+                        </div>
+
+                        <button onclick="checkG5Diagram()" class="w-full py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-xs rounded-lg hover:brightness-110">
+                            HOÀN THÀNH QUY TRÌNH XỬ LÝ
+                        </button>
+                        <div id="g5-feedback" class="text-xs font-semibold text-center"></div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-card border-t border-slate-800 py-4 px-4 text-center text-xs text-slate-400 mt-8">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+            <span>&copy; 2026 Bộ Công Cụ Tương Tác Tin Học 10 - Sách Kết Nối Tri Thức</span>
+            <span class="text-cyan-400">Hệ Thống Trò Chơi Học Tập Thực Tế</span>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT LOGIC -->
+    <script>
+        // Global State
+        let scores = { g1: 0, g2: 0, g3: 0, g4: 0, g5: 0 };
+        let badges = new Set();
+
+        // Web Audio API Sound System
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function playSound(type) {
+            try {
+                if (!audioCtx) audioCtx = new AudioCtx();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+
+                if (type === 'success') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.2);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else if (type === 'error') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.linearRampToValueAtTime(110, now + 0.2);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                } else if (type === 'click') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(400, now);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                }
+            } catch(e) { console.log('Audio error'); }
+        }
+
+        // Switch Game Tabs
+        function switchGame(gameNum) {
+            playSound('click');
+            document.querySelectorAll('.game-view').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-cyan-600', 'text-white', 'shadow-md');
+                btn.classList.add('bg-slate-800', 'text-slate-300');
+            });
+
+            document.getElementById(`game-${gameNum}`).classList.remove('hidden');
+            const activeTab = document.getElementById(`tab-${gameNum}`);
+            activeTab.classList.remove('bg-slate-800', 'text-slate-300');
+            activeTab.classList.add('bg-cyan-600', 'text-white', 'shadow-md');
+        }
+
+        function updateGlobalStats() {
+            const total = Object.values(scores).reduce((a, b) => a + b, 0);
+            document.getElementById('global-score').textContent = total;
+            document.getElementById('badge-count').textContent = `${badges.size}/5 Huy hiệu`;
+        }
+
+        function resetAllProgress() {
+            if (confirm("Bạn có muốn làm mới lại toàn bộ điểm số và tiến trình chơi?")) {
+                scores = { g1: 0, g2: 0, g3: 0, g4: 0, g5: 0 };
+                badges.clear();
+                document.querySelectorAll('[id$="-score"]').forEach(el => el.textContent = '0');
+                updateGlobalStats();
+            }
+        }
+
+        // ==========================================
+        // GAME 1 LOGIC
+        // ==========================================
+        function checkG1Integrity(type) {
+            playSound('click');
+            const feedback = document.getElementById('g1-feedback');
+            const selectedInfo = document.getElementById('g1-select-info').value;
+
+            if (selectedInfo !== 'nang') {
+                playSound('error');
+                feedback.className = "text-xs font-bold text-center mt-3 text-red-400";
+                feedback.textContent = "Chưa đúng! Trong ngữ cảnh thời tiết trạm quan trắc, 40°C thể hiện thông tin nắng nóng gay gắt.";
+                return;
+            }
+
+            if (type === 'time') {
+                playSound('success');
+                scores.g1 = 200;
+                badges.add('WEATHER_EXPERT');
+                document.getElementById('g1-score').textContent = scores.g1;
+                feedback.className = "text-xs font-bold text-center mt-3 text-emerald-400";
+                feedback.textContent = "XUẤT SẮC! Bạn đã xác định chính xác thông tin theo ngữ cảnh và đảm bảo tính toàn vẹn của bản tin!";
+                updateGlobalStats();
+            } else {
+                playSound('error');
+                feedback.className = "text-xs font-bold text-center mt-3 text-amber-400";
+                feedback.textContent = "Phông chữ hay nhạc nền không làm thay đổi tính toàn vẹn của thông tin. Cần bổ sung thời gian/lượng mưa cụ thể!";
+            }
+        }
+
+        // ==========================================
+        // GAME 2 LOGIC
+        // ==========================================
+        let g2SelectedDevice = '';
+
+        function selectG2Device(dev) {
+            playSound('click');
+            g2SelectedDevice = dev;
+            ['usb64', 'sd128', 'hdd2tb'].forEach(d => {
+                const btn = document.getElementById(`btn-dev-${d}`);
+                if (d === dev) {
+                    btn.className = "p-3 bg-amber-500/20 border-2 border-amber-500 rounded-xl text-xs text-center font-bold text-amber-300";
+                } else {
+                    btn.className = "p-3 bg-slate-800 border border-slate-700 rounded-xl text-xs text-center font-bold text-slate-300 hover:border-amber-400";
+                }
+            });
+        }
+
+        function checkG2Digitization() {
+            const mb = parseFloat(document.getElementById('g2-mb-input').value);
+            const gb = parseFloat(document.getElementById('g2-gb-input').value);
+            const feedback = document.getElementById('g2-feedback');
+
+            // 2000 books * 50 MB = 100,000 MB
+            // 100,000 MB / 1024 = 97.65625 GB (~97.7 GB)
+            const isMbCorrect = mb === 100000;
+            const isGbCorrect = Math.abs(gb - 97.7) <= 0.2 || Math.abs(gb - 97.6) <= 0.2;
+
+            if (isMbCorrect && isGbCorrect && g2SelectedDevice === 'sd128') {
+                playSound('success');
+                scores.g2 = 200;
+                badges.add('LIBRARY_DIGITIZER');
+                document.getElementById('g2-score').textContent = scores.g2;
+                feedback.className = "text-xs font-bold text-emerald-400";
+                feedback.textContent = "CHÍNH XÁC! Tổng dung lượng ~97.7 GB và Thẻ nhớ 128 GB là lựa chọn tối ưu, vừa đủ chứa và tiết kiệm nhất!";
+                updateGlobalStats();
+            } else {
+                playSound('error');
+                feedback.className = "text-xs font-bold text-red-400";
+                feedback.textContent = "Tính toán hoặc chọn thiết bị chưa đúng. Gợi ý: 2000 x 50 = 100.000 MB ≈ 97.7 GB. Thẻ 128GB là vừa đủ nhất!";
+            }
+        }
+
+        // ==========================================
+        // GAME 3 LOGIC
+        // ==========================================
+        function checkG3PhotoCalc() {
+            const avg = parseFloat(document.getElementById('g3-avg-input').value);
+            const count = parseFloat(document.getElementById('g3-count-input').value);
+            const feedback = document.getElementById('g3-feedback');
+
+            // Avg = (10144 + 9888 + 10016 + 9440) / 4 = 39488 / 4 = 9872 KB
+            // Total 16 GB = 16 * 1024 * 1024 = 16,777,216 KB
+            // Photo count = 16,777,216 / 9872 ≈ 1699.4 -> ~1699 hoặc 1700 ảnh
+
+            const isAvgCorrect = avg === 9872;
+            const isCountCorrect = Math.abs(count - 1699) <= 10 || Math.abs(count - 1700) <= 10;
+
+            if (isAvgCorrect && isCountCorrect) {
+                playSound('success');
+                scores.g3 = 200;
+                badges.add('STORAGE_INSPECTOR');
+                document.getElementById('g3-score').textContent = scores.g3;
+                feedback.className = "text-xs font-bold text-emerald-400";
+                feedback.textContent = "CHÍNH XÁC! Dung lượng TB 1 ảnh = 9.872 KB. Thẻ 16 GB chứa được khoảng ~1.700 bức ảnh!";
+                updateGlobalStats();
+            } else {
+                playSound('error');
+                feedback.className = "text-xs font-bold text-red-400";
+                feedback.textContent = "Chưa đúng! TB = (10144+9888+10016+9440)/4 = 9872 KB. Đổi 16GB ra KB rồi chia cho 9872 ≈ 1700 ảnh.";
+            }
+        }
+
+        // ==========================================
+        // GAME 4 LOGIC
+        // ==========================================
+        const g4Devices = [
+            { name: 'Đồng hồ thông minh', digital: true, icon: 'fa-stopwatch' },
+            { name: 'Đồng hồ cơ cổ', digital: false, icon: 'fa-clock' },
+            { name: 'Máy tính xách tay', digital: true, icon: 'fa-laptop' },
+            { name: 'Đĩa hát loa kèn', digital: false, icon: 'fa-record-vinyl' },
+            { name: 'Thẻ nhớ SSD', digital: true, icon: 'fa-memory' },
+            { name: 'Quạt máy cơ', digital: false, icon: 'fa-fan' }
+        ];
+
+        let g4SelectedDigital = new Set();
+
+        function initGame4() {
+            const grid = document.getElementById('g4-device-grid');
+            grid.innerHTML = '';
+            g4Devices.forEach((dev, idx) => {
+                const btn = document.createElement('button');
+                btn.id = `g4-dev-${idx}`;
+                btn.className = "p-3 bg-slate-950 border border-slate-800 rounded-xl flex flex-col items-center gap-2 hover:border-emerald-500 transition-all";
+                btn.innerHTML = `<i class="fa-solid ${dev.icon} text-xl text-slate-400"></i><span class="text-[11px] text-slate-300 font-semibold text-center">${dev.name}</span>`;
+                btn.onclick = () => toggleG4Device(idx);
+                grid.appendChild(btn);
+            });
+        }
+
+        function toggleG4Device(idx) {
+            playSound('click');
+            const btn = document.getElementById(`g4-dev-${idx}`);
+            if (g4SelectedDigital.has(idx)) {
+                g4SelectedDigital.delete(idx);
+                btn.classList.remove('border-emerald-500', 'bg-emerald-950/40');
+            } else {
+                g4SelectedDigital.add(idx);
+                btn.classList.add('border-emerald-500', 'bg-emerald-950/40');
+            }
+        }
+
+        function checkG4SmartCity() {
+            const feedback = document.getElementById('g4-feedback');
+            const opt1 = document.getElementById('g4-opt-1').checked;
+            const opt2 = document.getElementById('g4-opt-2').checked;
+            const opt3 = document.getElementById('g4-opt-3').checked;
+            const opt4 = document.getElementById('g4-opt-4').checked;
+
+            // Correct selected digital devices: idx 0, 2, 4
+            const selectedCorrectDevices = g4SelectedDigital.has(0) && g4SelectedDigital.has(2) && g4SelectedDigital.has(4) && g4SelectedDigital.size === 3;
+            // Correct features: 1, 2, 4 checked; 3 unchecked
+            const selectedCorrectFeatures = opt1 && opt2 && !opt3 && opt4;
+
+            if (selectedCorrectDevices && selectedCorrectFeatures) {
+                playSound('success');
+                scores.g4 = 250;
+                badges.add('SMART_CITY_ARCHITECT');
+                document.getElementById('g4-score').textContent = scores.g4;
+                feedback.className = "text-xs font-bold text-emerald-400 mt-2";
+                feedback.textContent = "XUẤT SẮC! Phân loại đúng các thiết bị số và nắm vững 3 ưu điểm cốt lõi (Lưu trữ lớn, Xử lý nhanh, Truyền tin xa)!";
+                updateGlobalStats();
+            } else {
+                playSound('error');
+                feedback.className = "text-xs font-bold text-red-400 mt-2";
+                feedback.textContent = "Chưa hoàn toàn đúng. Hãy chọn đúng 3 thiết bị số và lưu ý: Thiết bị số vẫn có thể bị hỏng vật lý!";
+            }
+        }
+
+        // ==========================================
+        // GAME 5 LOGIC
+        // ==========================================
+        let g5Slots = { 1: '', 2: '', 3: '' };
+
+        function assignG5Card(text, step) {
+            playSound('click');
+            g5Slots[step] = text;
+            const slotEl = document.getElementById(`g5-slot-${step}`);
+            slotEl.textContent = text;
+            slotEl.classList.remove('border-dashed');
+            slotEl.classList.add('border-solid', 'bg-slate-900');
+        }
+
+        function clearG5Slot(step) {
+            g5Slots[step] = '';
+            const slotEl = document.getElementById(`g5-slot-${step}`);
+            slotEl.textContent = 'Thả thao tác vào đây';
+            slotEl.classList.add('border-dashed');
+            slotEl.classList.remove('border-solid', 'bg-slate-900');
+        }
+
+        function checkG5Diagram() {
+            const feedback = document.getElementById('g5-feedback');
+            if (g5Slots[1].includes('PIN') && g5Slots[2].includes('mã PIN') && g5Slots[3].includes('tiền')) {
+                playSound('success');
+                scores.g5 = 150;
+                badges.add('PROCESS_MASTER');
+                document.getElementById('g5-score').textContent = scores.g5;
+                feedback.className = "text-xs font-bold text-emerald-400 mt-2";
+                feedback.textContent = "CHÍNH XÁC! Bạn đã sắp xếp chuẩn xác quy trình 3 bước xử lý thông tin tự động của máy tính!";
+                updateGlobalStats();
+            } else {
+                playSound('error');
+                feedback.className = "text-xs font-bold text-red-400 mt-2";
+                feedback.textContent = "Quy trình chưa chính xác! Bước 1: Tiếp nhận dữ liệu -> Bước 2: Xử lý dữ liệu -> Bước 3: Đưa ra kết quả.";
+            }
+        }
+
+        // Initialize default state
+        window.onload = function() {
+            initGame4();
+        };
+    </script>
+</body>
+</html>
+```eof
+
+### Tóm tắt các thành phần đã hoàn thiện trong ứng dụng web:
+
+1. **Giao diện chuẩn hiện đại (Tailwind CSS Dark Mode):** Thanh điều hướng linh hoạt giữa 5 trò chơi, hiển thị trực quan tổng điểm số và bộ 5 huy hiệu thành tích.
+2. **Hệ thống âm thanh tương tác Web Audio API:** Tạo hiệu ứng âm thanh sống động (click, thành công, báo lỗi) mà không phụ thuộc vào tệp âm thanh bên ngoài.
+3. **Mô phỏng 5 Chủ đề Thực tế:**
+   * **Trò chơi 1 (Trung tâm Dự báo thời tiết):** Xử lý dữ liệu nhiệt độ $40^{\circ}\text{C}$ theo đúng ngữ cảnh và phân tích tính toàn vẹn của bản tin.
+   * **Trò chơi 2 (Số hóa Thư viện):** Bài toán thực tế quy đổi $2.000$ cuốn sách ($100.000\text{ MB} \approx 97,7\text{ GB}$) để chọn mua thiết bị lưu trữ tối ưu ngân sách (Thẻ nhớ $128\text{ GB}$).
+   * **Trò chơi 3 (Kiểm định Thẻ nhớ máy ảnh):** Tính dung lượng trung bình tệp ảnh $\text{KB}$ và bài toán dự báo sức chứa ảnh trên thẻ $16\text{GB}$.
+   * **Trò chơi 4 (Thành phố thông minh):** Phân loại trực quan thiết bị số với thiết bị truyền thống và đánh giá 3 ưu điểm cốt lõi của công nghệ số.
+   * **Trò chơi 5 (Sơ đồ Xử lý ATM):** Kéo thả ghép nối mô hình 3 bước (Tiếp nhận $\rightarrow$ Xử lý $\rightarrow$ Xuất kết quả).
+
+Thầy có thể trực tiếp lưu tệp HTML này và mở bằng bất kỳ trình duyệt nào để cho học sinh trải nghiệm ngay!
+ 
